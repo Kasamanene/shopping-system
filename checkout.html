@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout - FashionShop</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Playfair Display', serif;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+  <!-- Navbar -->
+  <nav class="bg-black text-white p-6 shadow-lg">
+    <h1 class="text-3xl font-bold text-center tracking-widest">🛍 CHECKOUT</h1>
+  </nav>
+
+  <!-- Checkout Container -->
+  <div class="max-w-4xl mx-auto p-6 bg-white rounded-2xl shadow-xl mt-10">
+
+    <!-- Order Summary -->
+    <h2 class="text-2xl font-bold mb-6 border-b pb-2 text-gray-800">🧾 Order Summary</h2>
+    <div id="order-summary" class="space-y-6"></div>
+
+    <!-- Total Price -->
+    <div class="mt-6 text-xl font-semibold text-end">
+      Total: <span id="total-price" class="text-green-600 font-bold">0</span> THB
+    </div>
+
+    <!-- Customer Info -->
+    <div class="mt-10">
+      <h2 class="text-xl font-bold mb-4 border-b pb-2 text-gray-800">📦 Shipping Information</h2>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <label class="block mb-1">Full Name:</label>
+          <input id="customer-name" type="text" class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black" placeholder="John Doe">
+        </div>
+        <div>
+          <label class="block mb-1">Phone Number:</label>
+          <input id="customer-phone" type="text" class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black" placeholder="0812345678">
+        </div>
+      </div>
+      <div class="mt-4">
+        <label class="block mb-1">Address:</label>
+        <input id="customer-address" type="text" class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black" placeholder="123 Fashion Street, Bangkok">
+      </div>
+    </div>
+
+    <!-- Payment -->
+    <div class="mt-10">
+      <h2 class="text-xl font-bold mb-4 border-b pb-2 text-gray-800">💳 Payment Method</h2>
+      <select id="payment-method" class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-black">
+        <option value="credit-card">Credit Card</option>
+        <option value="paypal">PayPal</option>
+        <option value="cash-on-delivery">Cash on Delivery</option>
+      </select>
+    </div>
+
+    <!-- Confirm Button -->
+    <button onclick="placeOrder()"
+      class="mt-10 w-full py-3 rounded-xl font-bold text-lg tracking-wide text-white bg-black transition-all duration-300 hover:bg-gradient-to-r hover:from-gray-800 hover:to-black hover:scale-105 shadow-lg hover:shadow-2xl active:scale-95">
+      ✅ PLACE ORDER
+    </button>
+
+  </div>
+
+  <script>
+    const products = [
+      { id: 1, name: "Oversized Shirt", price: 299, image: "FashionShopimages/เสื้อโอเวอร์ไซน์.png" },
+      { id: 2, name: "Jeans", price: 999, image: "FashionShopimages/ยีนส์.jpg" },
+      { id: 3, name: "Hoodie", price: 1000, image: "FashionShopimages/เสื้อฮูด.png" },
+      { id: 4, name: "Jacket", price: 899, image: "FashionShopimages/แจกเกต.jpg" },
+      { id: 5, name: "Yeti Tumbler", price: 999, image: "FashionShopimages/แก้วเยติ.png" },
+      { id: 6, name: "Bag", price: 499, image: "FashionShopimages/กระเป๋า.png" },
+      { id: 7, name: "Hat", price: 199, image: "FashionShopimages/หมวก.png" },
+      { id: 8, name: "Short Dress", price: 699, image: "FashionShopimages/เดรสสั้น.png" },
+      { id: 9, name: "Shirt", price: 399, image: "FashionShopimages/เสื้อ.png" },
+      { id: 10, name: "Long Dress", price: 299, image: "FashionShopimages/เดรสยาว.png" }
+    ];
+
+    function loadOrderSummary() {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const orderSummary = document.getElementById("order-summary");
+      let total = 0;
+
+      if (cart.length === 0) {
+        orderSummary.innerHTML = "<p class='text-gray-500'>🛍 Your cart is empty.</p>";
+        return;
+      }
+
+      orderSummary.innerHTML = "";
+      cart.forEach(item => {
+        const product = products.find(p => p.id === item.id);
+        if (product) {
+          total += product.price * item.quantity;
+          orderSummary.innerHTML += `
+            <div class="flex items-center gap-4 border-b pb-4">
+              <img src="${product.image}" class="w-20 h-20 object-cover rounded border">
+              <div>
+                <h3 class="text-lg font-bold">${product.name}</h3>
+                <p class="text-gray-600">${item.quantity} x ${product.price} THB</p>
+              </div>
+            </div>
+          `;
+        }
+      });
+
+      document.getElementById("total-price").innerText = total;
+    }
+
+    function placeOrder() {
+      const name = document.getElementById("customer-name").value.trim();
+      const phone = document.getElementById("customer-phone").value.trim();
+      const address = document.getElementById("customer-address").value.trim();
+      const payment = document.getElementById("payment-method").value;
+
+      if (!name || !phone || !address) {
+        alert("⚠️ Please fill in all shipping information.");
+        return;
+      }
+
+      alert(`🎉 Order Placed!\n\nName: ${name}\nPhone: ${phone}\nAddress: ${address}\nPayment: ${payment}`);
+      localStorage.removeItem("cart");
+      window.location.href = "thankyou.html";
+    }
+
+    window.onload = loadOrderSummary;
+  </script>
+</body>
+</html>

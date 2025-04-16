@@ -1,0 +1,12 @@
+[
+    { "id": 1, "name": "Oversized Shirt", "price": 299, "image": "FashionShopimages/เสื้อโอเวอร์ไซน์.png" },
+    { "id": 2, "name": "Jeans", "price": 999, "image": "FashionShopimages/ยีนส์.jpg" },
+    { "id": 3, "name": "Hoodie", "price": 1000, "image": "FashionShopimages/เสื้อฮูด.png" },
+    { "id": 4, "name": "Jacket", "price": 899, "image": "FashionShopimages/แจกเกต.jpg" },
+    { "id": 5, "name": "Yeti Tumbler", "price": 999, "image": "FashionShopimages/แก้วเยติ.png" },
+    { "id": 6, "name": "Bag", "price": 499, "image": "FashionShopimages/กระเป๋า.png" },
+    { "id": 7, "name": "Hat", "price": 199, "image": "FashionShopimages/หมวก.png" },
+    { "id": 8, "name": "Short Dress", "price": 699, "image": "FashionShopimages/เดรสสั้น.png" },
+    { "id": 9, "name": "Shirt", "price": 399, "image": "FashionShopimages/เสื้อ.png" },
+    { "id": 10, "name": "Long Dress", "price": 299, "image": "FashionShopimages/เดรสยาว.png" }
+  ]

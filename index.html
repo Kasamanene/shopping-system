@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dior Style Shop</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Playfair Display', serif;
+    }
+
+    .dior-font {
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* Animation for hover effects */
+    .product-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .add-to-cart-btn {
+      transition: all 0.3s ease;
+    }
+
+    .add-to-cart-btn:hover {
+      background-color: #333;
+      transform: scale(1.1);
+    }
+
+    .product-img:hover {
+      transform: scale(1.05);
+      transition: all 0.3s ease;
+    }
+  </style>
+</head>
+
+<body class="bg-white text-black">
+
+  <!-- Navbar -->
+  <nav class="border-b border-gray-300 p-6">
+    <h1 class="text-4xl font-bold dior-font text-center tracking-widest">Fashion</h1>
+  </nav>
+
+  <!-- Product Section -->
+  <div class="container mx-auto px-6 py-10">
+    <h2 class="text-2xl font-semibold mb-6 border-b border-gray-200 pb-2">Recommended Products</h2>
+    <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+  </div>
+
+  <!-- Cart Section -->
+  <div class="container mx-auto px-6 py-10 border-t border-gray-200">
+    <h2 class="text-2xl font-semibold mb-6">Your Shopping Cart</h2>
+    <div id="cart-items" class="space-y-4"></div>
+    <div class="mt-6 text-xl">
+      Total: <span id="total-price" class="font-bold">0</span> THB
+    </div>
+    <button onclick="checkout()" class="bg-black text-white px-6 py-2 rounded hover:bg-gray-800 transition mt-4">
+      Proceed to Checkout
+    </button>
+  </div>
+
+  <script>
+    const products = [
+      { id: 1, name: "White Shirt", price: 299, image: "FashionShopimages/เสื้อโอเวอร์ไซน์.png" },
+      { id: 2, name: "Jeans", price: 999, image: "FashionShopimages/ยีนส์.jpg" },
+      { id: 3, name: "Hoodie", price: 1000, image: "FashionShopimages/เสื้อฮูด.png" },
+      { id: 4, name: "Jacket", price: 899, image: "FashionShopimages/แจกเกต.jpg" },
+      { id: 5, name: "Yeti Tumbler", price: 999, image: "FashionShopimages/แก้วเยติ.png", description: "Yeti tumbler that keeps drinks cold" },
+      { id: 6, name: "Bag", price: 499, image: "FashionShopimages/กระเป๋า.png", description: "Minimalist fashion bag, durable" },
+      { id: 7, name: "Hat", price: 199, image: "FashionShopimages/หมวก.png", description: "Fashionable, comfortable hat" },
+      { id: 8, name: "Short Dress", price: 699, image: "FashionShopimages/เดรสสั้น.png", description: "Comfortable short dress for summer" },
+      { id: 9, name: "Shirt", price: 399, image: "FashionShopimages/เสื้อ.png", description: "Stylish short sleeve shirt for any occasion" },
+      { id: 10, name: "Long Dress", price: 299, image: "FashionShopimages/เดรสยาว.png", description: "Elegant long dress for events" }
+    ];
+
+    // ฟังก์ชันการเพิ่มสินค้าลงตะกร้า
+    function addToCart(id) {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      let item = cart.find(i => i.id === id);
+      if (item) item.quantity += 1;
+      else cart.push({ id, quantity: 1 });
+      localStorage.setItem("cart", JSON.stringify(cart));
+      loadCart();
+    }
+
+    // ฟังก์ชันการเพิ่มหรือลดจำนวนสินค้า
+    function updateQuantity(id, delta) {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      let item = cart.find(i => i.id === id);
+
+      if (item) {
+        item.quantity += delta;
+        if (item.quantity <= 0) {
+          removeFromCart(id);
+          return;
+        }
+      }
+
+      localStorage.setItem("cart", JSON.stringify(cart));
+      loadCart();
+    }
+
+    // ฟังก์ชันการลบสินค้าออกจากตะกร้า
+    function removeFromCart(id) {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      cart = cart.filter(item => item.id !== id);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      loadCart();
+    }
+
+    // ฟังก์ชันที่โหลดตะกร้าสินค้า
+    function loadCart() {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      let cartItems = document.getElementById("cart-items");
+      let totalPrice = 0;
+      cartItems.innerHTML = "";
+
+      if (cart.length === 0) {
+        cartItems.innerHTML = "<p class='text-gray-500'>🧺 Your cart is empty</p>";
+        return;
+      }
+
+      cart.forEach(item => {
+        let p = products.find(prod => prod.id === item.id);
+        if (p) {
+          totalPrice += p.price * item.quantity;
+          cartItems.innerHTML += `
+            <div class="border border-gray-200 p-4 rounded-lg shadow-sm flex items-center">
+              <img src="${p.image}" class="w-20 h-20 object-cover rounded border border-gray-100">
+              <div class="ml-4 flex-1">
+                <h3 class="text-lg font-semibold">${p.name}</h3>
+                <p class="text-gray-500">${p.price} THB</p>
+                <div class="mt-2 flex items-center">
+                  <button onclick="updateQuantity(${p.id}, -1)" class="bg-gray-200 px-2 py-1 rounded hover:bg-gray-300">-</button>
+                  <span class="mx-3">${item.quantity}</span>
+                  <button onclick="updateQuantity(${p.id}, 1)" class="bg-gray-200 px-2 py-1 rounded hover:bg-gray-300">+</button>
+                </div>
+              </div>
+              <button onclick="removeFromCart(${p.id})"
+                class="ml-auto text-sm text-gray-500 hover:text-red-600 transition">Remove</button>
+            </div>
+          `;
+        }
+      });
+
+      document.getElementById("total-price").innerText = totalPrice;
+    }
+
+    // ฟังก์ชันการโหลดสินค้าลงในหน้า
+    function loadProducts(products) {
+      let list = document.getElementById("product-list");
+      products.forEach(p => {
+        list.innerHTML += `
+          <div class="bg-white border border-gray-200 p-5 rounded-lg shadow-sm product-card hover:shadow-xl transition transform duration-300 text-center">
+            <img src="${p.image}" alt="${p.name}" class="w-48 h-48 object-cover mx-auto rounded mb-4 border border-gray-100 product-img">
+            <h3 class="text-lg font-semibold">${p.name}</h3>
+            <p class="text-gray-500 mt-1">${p.price} THB</p>
+            <button onclick="addToCart(${p.id})"
+              class="mt-4 bg-black text-white px-6 py-2 rounded add-to-cart-btn hover:bg-gray-800 transition transform duration-300">
+              Add to Cart
+            </button>
+          </div>
+        `;
+      });
+    }
+
+    // ฟังก์ชันการดำเนินการเมื่อกด "Proceed to Checkout"
+    function checkout() {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      if (cart.length === 0) {
+        alert("Your cart is empty. Please add items to the cart before checking out.");
+      } else {
+        alert("Proceeding to checkout...");
+        // ที่นี่คุณสามารถเพิ่มการเชื่อมโยงไปยังหน้าชำระเงินหรือฟังก์ชันอื่น ๆ ที่เกี่ยวข้องกับการชำระเงิน
+        window.location.href = "checkout.html"; // เปลี่ยนลิงก์นี้เป็นหน้าที่คุณต้องการ
+      }
+    }
+
+    window.onload = () => {
+      loadProducts(products); // โหลดสินค้าเมื่อหน้าเว็บโหลด
+      loadCart(); // โหลดตะกร้าสินค้าตอนโหลด
+    };
+
+  </script>
+</body>
+
+</html>

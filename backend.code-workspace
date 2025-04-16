@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../FashionShop"
+		},
+		{
+			"path": "../FashionShopbackenddata"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "backend"
+	}
+}

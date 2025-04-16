@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>จัดการสินค้า</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <a href="index.html" class="back-btn">⬅ กลับ</a>
+  </header>
+
+  <main class="container">
+    <h2 class="section-title">⚙️ จัดการสินค้า</h2>
+
+    <div id="admin-products" class="product-list">
+      <!-- รายการสินค้าจะแสดงที่นี่ -->
+    </div>
+
+    <section class="form-section">
+      <h3 class="form-title">➕ เพิ่มสินค้าใหม่</h3>
+      <form id="add-form" class="product-form">
+        <input type="text" placeholder="ชื่อสินค้า" required class="input-field">
+        <input type="text" placeholder="คำอธิบาย" required class="input-field">
+        <input type="number" placeholder="ราคา" required class="input-field">
+        <button type="submit" class="submit-btn">เพิ่ม</button>
+      </form>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
