@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FashionShop - สินค้า</title>
+  <link rel="stylesheet" href="style.css"> <!-- เรียกใช้ไฟล์ CSS -->
+  <style>
+    /* ปรับแต่งพื้นฐาน */
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    header {
+      background-color: #111;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      font-size: 2.5em;
+      letter-spacing: 2px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      margin: 0;
+      font-family: 'Georgia', serif;
+    }
+
+    main {
+      padding: 30px 20px;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 2em;
+      color: #333;
+      margin-bottom: 40px;
+    }
+
+    #product-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+      justify-items: center;
+    }
+
+    .product {
+      background-color: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+      border: 1px solid #ddd;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .product:hover {
+      transform: translateY(-15px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      background-color: #f9f9f9;
+    }
+
+    .product img {
+      width: 100%;
+      height: auto;
+      border-bottom: 2px solid #f0f0f0;
+      transition: transform 0.3s ease;
+    }
+
+    .product:hover img {
+      transform: scale(1.05);
+    }
+
+    .product h3 {
+      font-size: 1.3em;
+      color: #333;
+      margin: 10px 0;
+    }
+
+    .product p {
+      color: #777;
+      font-size: 1.1em;
+      margin: 0 0 20px;
+    }
+
+    /* ปรับแต่งปุ่ม */
+    .product button {
+      font-size: 16px;
+      padding: 12px 20px;
+      border: none;
+      background-color: #333;
+      color: white;
+      margin-top: 10px;
+      border-radius: 4px;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .product button:hover {
+      background-color: #555;
+      transform: translateY(-3px);
+    }
+
+    .product button.view-details {
+      background-color: #eeeee5;
+      color: #333;
+    }
+
+    .product button.view-details:hover {
+      background-color: #1b1915;
+      color: #fff;
+    }
+
+    /* ปรับปุ่มย้อนกลับ */
+    .back-button {
+      background-color: #333;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 4px;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+      margin-top: 20px;
+      transition: background-color 0.3s ease;
+    }
+
+    .back-button:hover {
+      background-color: #444;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>FashionShop</h1>
+  </header>
+
+  <main>
+    <h2>สินค้าแนะนำ</h2>
+    <div id="product-list"></div>
+
+    <!-- ปุ่มกลับไปหน้าหลัก -->
+    <a href="index.html" class="back-button">กลับไปหน้าหลัก</a>
+  </main>
+
+  <script>
+    const products = [
+      { id: 1, name: "Oversized Shirt", price: 299, image: "FashionShopimages/เสื้อโอเวอร์ไซน์.png" },
+      { id: 2, name: "Jeans", price: 999, image: "FashionShopimages/ยีนส์.jpg" },
+      { id: 3, name: "Hoodie", price: 1000, image: "FashionShopimages/เสื้อฮูด.png" },
+      { id: 4, name: "Jacket", price: 899, image: "FashionShopimages/แจกเกต.jpg" },
+      { id: 5, name: "Yeti Tumbler", price: 999, image: "FashionShopimages/แก้วเยติ.png" },
+      { id: 6, name: "Bag", price: 499, image: "FashionShopimages/กระเป๋า.png" },
+      { id: 7, name: "Hat", price: 199, image: "FashionShopimages/หมวก.png" },
+      { id: 8, name: "Short Dress", price: 699, image: "FashionShopimages/เดรสสั้น.png" },
+      { id: 9, name: "Shirt", price: 399, image: "FashionShopimages/เสื้อ.png" },
+      { id: 10, name: "Long Dress", price: 299, image: "FashionShopimages/เดรสยาว.png" }
+    ];
+  
+    const productList = document.getElementById("product-list");
+  
+    products.forEach(product => {
+      const productDiv = document.createElement("div");
+      productDiv.style.border = "1px solid #ccc";
+      productDiv.style.padding = "10px";
+      productDiv.style.margin = "10px";
+      productDiv.style.width = "250px";
+      productDiv.style.display = "inline-block";
+      productDiv.style.verticalAlign = "top";
+      productDiv.style.textAlign = "center";
+      productDiv.innerHTML = `
+        <img src="${product.image}" alt="${product.name}" style="width:200px;height:auto;" />
+        <h3>${product.name}</h3>
+        <p>Price: ${product.price} THB</p>
+        <a href="product-details.html?id=${product.id}">
+          <button>View Details</button>
+        </a>
+        <button onclick="addToCart(${product.id})">Add to Cart</button>
+      `;
+      productList.appendChild(productDiv);
+    });
+  
+    function addToCart(productId) {
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const existingItem = cart.find(item => item.id === productId);
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        cart.push({ id: productId, quantity: 1 });
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert("Product added to cart!");
+    }
+  </script>
+
+</html>
